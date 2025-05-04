@@ -10,6 +10,10 @@ dotenv.config();
 app.use(cors());            
 app.use(express.json());  
 
+app.get('/', (req, res) => {
+  res.send('Backend is up and running!');
+});
+
 app.use('/api', routes);   
 app.use(errorHandler);       
 
