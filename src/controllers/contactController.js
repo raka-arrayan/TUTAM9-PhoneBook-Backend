@@ -11,6 +11,7 @@ exports.getContacts = (req, res, next) => {
 exports.addContact = (req, res, next) => {
   try {
     const { name, phone, email, image } = req.body;
+    console.log('Received request:', req.body); 
     if (!name || !phone || !email || !image) {
       return res.status(400).json({ success: false, error: "All fields are required" });
     }
