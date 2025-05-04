@@ -7,7 +7,10 @@ const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config();
 
-app.use(cors());            
+app.use(cors({
+  origin: 'https://tutam-9-phonebook.vercel.app',
+}));
+        
 app.use(express.json());  
 
 app.get('/', (req, res) => {
