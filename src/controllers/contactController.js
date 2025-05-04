@@ -11,17 +11,20 @@ exports.getContacts = (req, res, next) => {
 exports.addContact = (req, res, next) => {
   try {
     const { name, phone, email, image } = req.body;
-    console.log('Received request:', req.body); 
+    console.log("Received new contact:", req.body);
+
     if (!name || !phone || !email || !image) {
       return res.status(400).json({ success: false, error: "All fields are required" });
     }
+
     const newContact = {
-      id: Date.now(),
+      id: Date.now().toString(), //  Simpan ID sebagai string
       name,
       phone,
       email,
-      image
+      image,
     };
+
     contacts.push(newContact);
     res.status(201).json({ success: true, data: newContact });
   } catch (err) {
@@ -34,12 +37,16 @@ exports.updateContact = (req, res, next) => {
     const { id } = req.params;
     const { name, phone, email, image } = req.body;
 
-    const index = contacts.findIndex(contact => contact.id == id);
+    if (!name || !phone || !email || !image) {
+      return res.status(400).json({ success: false, error: "All fields are required for update" });
+    }
+
+    const index = contacts.findIndex(contact => contact.id === id); // pakai === karena ID string
     if (index === -1) {
       return res.status(404).json({ success: false, error: "Contact not found" });
     }
 
-    contacts[index] = { id: parseInt(id), name, phone, email, image };
+    contacts[index] = { id, name, phone, email, image };
     res.json({ success: true, data: contacts[index] });
   } catch (err) {
     next(err);
@@ -49,10 +56,11 @@ exports.updateContact = (req, res, next) => {
 exports.deleteContact = (req, res, next) => {
   try {
     const { id } = req.params;
-    const index = contacts.findIndex(contact => contact.id == id);
+    const index = contacts.findIndex(contact => contact.id === id);
     if (index === -1) {
       return res.status(404).json({ success: false, error: "Contact not found" });
     }
+
     const deleted = contacts.splice(index, 1);
     res.json({ success: true, data: deleted[0] });
   } catch (err) {
